@@ -12,5 +12,25 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:7.0.7" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:3.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.46" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:7.0.7" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:4.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:4.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.5.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.5.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:6.2.11" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:6.2.11" level="project" />
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:3.0.2" level="project" />
   </component>
 </module>
