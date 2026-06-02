@@ -16,7 +16,17 @@ while True:
 
     text = input("\nArabizi > ")
 
+    words = text.split()
+
+    result = []
+
+    for word in words:
+
+        result.append(
+            service.transliterate(word)
+        )
+
     print(
         "Arabic >",
-        service.transliterate(text)
+        " ".join(result)
     )
