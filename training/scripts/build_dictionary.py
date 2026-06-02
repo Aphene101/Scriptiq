@@ -1,36 +1,52 @@
 from pathlib import Path
-import pandas as pd
 import json
+import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 
 dataset_path = ROOT / "datasets" / "raw" / "Arabizi-Arabic Parallel corpora.xlsx"
+processed_dir = ROOT / "datasets" / "processed"
 
-print(dataset_path)
+processed_dir.mkdir(parents=True, exist_ok=True)
 
 df = pd.read_excel(dataset_path)
 
-dictionary = {}
+forward_dictionary = {}
+reverse_dictionary = {}
 
 for _, row in df.iterrows():
+
     arabizi = str(row["Arabize"]).strip().lower()
     arabic = str(row["Arabic"]).strip()
 
-    if arabizi and arabic:
-        dictionary[arabizi] = arabic
+    if not arabizi or not arabic:
+        continue
 
-print(f"Entries: {len(dictionary):,}")
+    # Keep first occurrence
+    forward_dictionary.setdefault(arabizi, arabic)
+    reverse_dictionary.setdefault(arabic, arabizi)
 
-with open(
-    "../datasets/processed/dictionary.json",
-    "w",
-    encoding="utf-8"
-) as f:
+forward_path = processed_dir / "dictionary.json"
+reverse_path = processed_dir / "reverse_dictionary.json"
+
+with open(forward_path, "w", encoding="utf-8") as f:
     json.dump(
-        dictionary,
+        forward_dictionary,
         f,
         ensure_ascii=False,
         indent=2
     )
 
-print("Dictionary saved.")
+with open(reverse_path, "w", encoding="utf-8") as f:
+    json.dump(
+        reverse_dictionary,
+        f,
+        ensure_ascii=False,
+        indent=2
+    )
+
+print(f"Forward entries: {len(forward_dictionary):,}")
+print(f"Reverse entries: {len(reverse_dictionary):,}")
+
+print(f"Saved: {forward_path}")
+print(f"Saved: {reverse_path}")

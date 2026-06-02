@@ -11,20 +11,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class DictionaryServiceImpl implements DictionaryService {
+public class ReverseDictionaryServiceImpl
+        implements ReverseDictionaryService {
 
     private final ObjectMapper objectMapper;
 
     private Map<String, String> dictionary = new HashMap<>();
 
-    public DictionaryServiceImpl(ObjectMapper objectMapper) {
+    public ReverseDictionaryServiceImpl(
+            ObjectMapper objectMapper
+    ) {
         this.objectMapper = objectMapper;
     }
 
     @PostConstruct
     public void loadDictionary() throws Exception {
+
         InputStream inputStream =
-                new ClassPathResource("dictionary.json").getInputStream();
+                new ClassPathResource(
+                        "reverse_dictionary.json"
+                ).getInputStream();
 
         dictionary = objectMapper.readValue(
                 inputStream,
@@ -34,6 +40,6 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public String lookup(String text) {
-        return dictionary.get(text.toLowerCase());
+        return dictionary.get(text);
     }
 }
