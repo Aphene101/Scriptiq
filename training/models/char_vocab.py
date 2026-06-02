@@ -1,4 +1,5 @@
 from collections import Counter
+import json
 
 
 class CharVocab:
@@ -79,3 +80,33 @@ class CharVocab:
 
     def size(self):
         return len(self.char_to_idx)
+
+    def save(self, path):
+
+        with open(
+                path,
+                "w",
+                encoding="utf-8"
+        ) as f:
+
+            json.dump(
+                self.char_to_idx,
+                f,
+                ensure_ascii=False,
+                indent=2
+            )
+
+
+    def load(self, path):
+
+        with open(
+                path,
+                encoding="utf-8"
+        ) as f:
+
+            self.char_to_idx = json.load(f)
+
+        self.idx_to_char = {
+            v: k
+            for k, v in self.char_to_idx.items()
+        }

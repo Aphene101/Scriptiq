@@ -88,9 +88,46 @@ class Seq2Seq(nn.Module):
     def __init__(
             self,
             encoder,
-            decoder
+            decoder,
+            target_vocab_size
     ):
         super().__init__()
 
         self.encoder = encoder
         self.decoder = decoder
+        self.target_vocab_size = target_vocab_size
+
+    def forward(
+            self,
+            source,
+            target
+    ):
+
+        batch_size = source.shape[0]
+        target_length = target.shape[1]
+
+        outputs = torch.zeros(
+            batch_size,
+            target_length,
+            self.target_vocab_size,
+            device=source.device
+        )
+
+        hidden, cell = self.encoder(source)
+
+        decoder_input = target[:, 0]
+
+        for t in range(1, target_length):
+
+            prediction, hidden, cell = self.decoder(
+                decoder_input,
+                hidden,
+                cell
+            )
+
+            outputs[:, t] = prediction
+
+            # Teacher forcing
+            decoder_input = target[:, t]
+
+        return outputs
