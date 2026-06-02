@@ -36,5 +36,6 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.19.2" level="project" />
     <orderEntry type="library" name="Maven: jakarta.annotation:jakarta.annotation-api:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:6.2.11" level="project" />
+    <orderEntry type="library" name="Maven: com.microsoft.onnxruntime:onnxruntime:1.22.0" level="project" />
   </component>
 </module>
