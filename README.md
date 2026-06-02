@@ -4,8 +4,6 @@ High-performance transliteration API.
 
 Examples:
 
-شمس -> shams
-
 shams -> شمس
 
 7abibi -> حبيبي
