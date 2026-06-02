@@ -29,3 +29,17 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python build artifacts
+dist/
+build/
+*.egg-info/
