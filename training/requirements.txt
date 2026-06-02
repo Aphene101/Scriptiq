@@ -1,9 +1,8 @@
-torch
-transformers
 datasets
 pandas
 numpy
 scikit-learn
+openpyxl
+torch
 onnx
 onnxruntime
-jupyter
