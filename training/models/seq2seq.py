@@ -131,3 +131,45 @@ class Seq2Seq(nn.Module):
             decoder_input = target[:, t]
 
         return outputs
+
+    def predict(
+            self,
+            source,
+            sos_token,
+            eos_token,
+            max_length=24
+    ):
+
+        self.eval()
+
+        with torch.no_grad():
+
+            hidden, cell = self.encoder(source)
+
+            decoder_input = torch.tensor(
+                [sos_token],
+                device=source.device
+            )
+
+            result = []
+
+            for _ in range(max_length):
+
+                prediction, hidden, cell = self.decoder(
+                    decoder_input,
+                    hidden,
+                    cell
+                )
+
+                predicted_token = prediction.argmax(1)
+
+                token = predicted_token.item()
+
+                if token == eos_token:
+                    break
+
+                result.append(token)
+
+                decoder_input = predicted_token
+
+            return result

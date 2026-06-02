@@ -52,8 +52,38 @@ model.load_state_dict(
 )
 
 model.eval()
+model.to(DEVICE)
 
 print("Model loaded successfully")
 print()
 print("Source vocab:", source_vocab.size())
 print("Target vocab:", target_vocab.size())
+
+while True:
+
+    text = input("\nArabizi > ").strip().lower()
+
+    encoded = source_vocab.encode(text)
+
+    encoded = encoded[:24]
+
+    while len(encoded) < 24:
+        encoded.append(0)
+
+    source_tensor = torch.tensor(
+        [encoded],
+        dtype=torch.long,
+        device=DEVICE
+    )
+
+    prediction = model.predict(
+        source_tensor,
+        target_vocab.char_to_idx["<SOS>"],
+        target_vocab.char_to_idx["<EOS>"]
+    )
+
+    arabic = target_vocab.decode(
+        prediction
+    )
+
+    print("Arabic >", arabic)
