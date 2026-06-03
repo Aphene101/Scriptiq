@@ -13,6 +13,7 @@ public class TransliterationServiceImpl
     private final InputTypeDetector inputTypeDetector;
     private final OnnxTransliterationService onnxTransliterationService;
     private final StatisticsService statisticsService;
+    private final UnknownWordService unknownWordService;
 
     @Override
     public String convert(String text) {
@@ -61,6 +62,10 @@ public class TransliterationServiceImpl
 
                         long start =
                                 System.nanoTime();
+
+                        unknownWordService.record(
+                                word.toLowerCase()
+                        );
 
                         converted =
                                 onnxTransliterationService
