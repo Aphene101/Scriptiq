@@ -64,79 +64,46 @@ public class OnnxTransliterationService {
         System.out.println(
                 "Decoder loaded"
         );
-
-        testEncoder();
-        testDecoder();
     }
 
-    private void testEncoder()
-            throws Exception {
+    private int argmax(
+            float[] values
+    ) {
 
-        long[] encoded =
-                sourceVocabService
-                        .getVocab()
-                        .encode("7abibi");
+        int bestIndex = 0;
 
-        try (
-                OnnxTensor sourceTensor =
-                        OnnxTensor.createTensor(
-                                environment,
-                                new long[][]{
-                                        encoded
-                                }
-                        )
+        float bestValue =
+                values[0];
+
+        for (
+                int i = 1;
+                i < values.length;
+                i++
         ) {
 
-            var result =
-                    encoderSession.run(
-                            Map.of(
-                                    "source",
-                                    sourceTensor
-                            )
-                    );
+            if (
+                    values[i]
+                            > bestValue
+            ) {
 
-            System.out.println();
-            System.out.println(
-                    "Encoder executed"
-            );
+                bestValue =
+                        values[i];
 
-            float[][][] hidden =
-                    (float[][][])
-                            result.get(0)
-                                    .getValue();
-
-            float[][][] cell =
-                    (float[][][])
-                            result.get(1)
-                                    .getValue();
-
-            System.out.println(
-                    "Hidden shape: "
-                            + hidden.length
-                            + ", "
-                            + hidden[0].length
-                            + ", "
-                            + hidden[0][0].length
-            );
-
-            System.out.println(
-                    "Cell shape: "
-                            + cell.length
-                            + ", "
-                            + cell[0].length
-                            + ", "
-                            + cell[0][0].length
-            );
+                bestIndex = i;
+            }
         }
+
+        return bestIndex;
     }
 
-    private void testDecoder()
-            throws Exception {
+    private String generate(
+            String text
+    ) throws Exception {
 
         long[] encoded =
                 sourceVocabService
                         .getVocab()
-                        .encode("7abibi");
+                        .encode(text);
 
         try (
                 OnnxTensor sourceTensor =
@@ -166,62 +133,115 @@ public class OnnxTransliterationService {
                             encoderResult.get(1)
                                     .getValue();
 
-            long sosToken =
+            int sos =
                     targetVocabService
                             .getVocab()
                             .getIndex("<SOS>");
 
-            try (
+            int eos =
+                    targetVocabService
+                            .getVocab()
+                            .getIndex("<EOS>");
 
-                    OnnxTensor tokenTensor =
-                            OnnxTensor.createTensor(
-                                    environment,
-                                    new long[]{
-                                            sosToken
-                                    }
-                            );
+            long currentToken =
+                    sos;
 
-                    OnnxTensor hiddenTensor =
-                            OnnxTensor.createTensor(
-                                    environment,
-                                    hidden
-                            );
+            StringBuilder result =
+                    new StringBuilder();
 
-                    OnnxTensor cellTensor =
-                            OnnxTensor.createTensor(
-                                    environment,
-                                    cell
-                            )
-
+            for (
+                    int step = 0;
+                    step < 24;
+                    step++
             ) {
 
-                var decoderResult =
-                        decoderSession.run(
-                                Map.of(
-                                        "token",
-                                        tokenTensor,
-                                        "hidden",
-                                        hiddenTensor,
-                                        "cell",
-                                        cellTensor
+                try (
+
+                        OnnxTensor tokenTensor =
+                                OnnxTensor.createTensor(
+                                        environment,
+                                        new long[]{
+                                                currentToken
+                                        }
+                                );
+
+                        OnnxTensor hiddenTensor =
+                                OnnxTensor.createTensor(
+                                        environment,
+                                        hidden
+                                );
+
+                        OnnxTensor cellTensor =
+                                OnnxTensor.createTensor(
+                                        environment,
+                                        cell
                                 )
-                        );
 
-                float[][] prediction =
-                        (float[][])
-                                decoderResult.get(0)
-                                        .getValue();
+                ) {
 
-                System.out.println();
-                System.out.println(
-                        "Decoder executed"
-                );
+                    var decoderResult =
+                            decoderSession.run(
+                                    Map.of(
+                                            "token",
+                                            tokenTensor,
+                                            "hidden",
+                                            hiddenTensor,
+                                            "cell",
+                                            cellTensor
+                                    )
+                            );
 
-                System.out.println(
-                        "Prediction size: "
-                                + prediction[0].length
-                );
+                    float[][] prediction =
+                            (float[][])
+                                    decoderResult.get(0)
+                                            .getValue();
+
+                    hidden =
+                            (float[][][])
+                                    decoderResult.get(1)
+                                            .getValue();
+
+                    cell =
+                            (float[][][])
+                                    decoderResult.get(2)
+                                            .getValue();
+
+                    int predictedToken =
+                            argmax(
+                                    prediction[0]
+                            );
+
+                    if (
+                            predictedToken
+                                    == eos
+                    ) {
+                        break;
+                    }
+
+                    String character =
+                            targetVocabService
+                                    .getVocab()
+                                    .getCharacter(
+                                            predictedToken
+                                    );
+
+                    result.append(
+                            character
+                    );
+
+                    currentToken =
+                            predictedToken;
+                }
             }
+
+            return result.toString();
         }
+    }
+
+    public String transliterate(
+            String text
+    ) throws Exception {
+
+        return generate(text);
     }
 }

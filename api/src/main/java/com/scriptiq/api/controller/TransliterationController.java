@@ -14,7 +14,7 @@ public class TransliterationController {
 
     private final TransliterationService transliterationService;
 
-    @PostMapping("/convert")
+    @PostMapping("/transliterate")
     public ConvertResponse convert(
             @Valid @RequestBody ConvertRequest request
     ) {

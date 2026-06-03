@@ -11,6 +11,7 @@ public class TransliterationServiceImpl
     private final DictionaryService dictionaryService;
     private final ReverseDictionaryService reverseDictionaryService;
     private final InputTypeDetector inputTypeDetector;
+    private final OnnxTransliterationService onnxTransliterationService;
 
     @Override
     public String convert(String text) {
@@ -37,24 +38,52 @@ public class TransliterationServiceImpl
                 converted =
                         reverseDictionaryService.lookup(word);
 
+                if (converted == null) {
+                    converted = word;
+                }
+
             } else {
 
                 converted =
                         dictionaryService.lookup(
                                 word.toLowerCase()
                         );
+
+                if (converted == null) {
+
+                    try {
+
+                        long start =
+                                System.nanoTime();
+
+                        converted =
+                                onnxTransliterationService
+                                        .transliterate(
+                                                word.toLowerCase()
+                                        );
+
+                        long end =
+                                System.nanoTime();
+
+                        System.out.println(
+                                "ONNX took "
+                                        + ((end - start) / 1_000_000)
+                                        + " ms"
+                        );
+
+                    } catch (Exception e) {
+
+                        converted = word;
+                    }
+                }
             }
 
-            if (converted == null) {
-                converted = word;
-            }
+                result.append(converted);
 
-            result.append(converted);
-
-            if (i < words.length - 1) {
-                result.append(" ");
+                if (i < words.length - 1) {
+                    result.append(" ");
+                }
             }
-        }
 
         return result.toString();
     }
