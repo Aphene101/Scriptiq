@@ -11,30 +11,60 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class DictionaryServiceImpl implements DictionaryService {
+public class DictionaryServiceImpl
+        implements DictionaryService {
 
     private final ObjectMapper objectMapper;
+    private final ApprovedWordsService approvedWordsService;
 
-    private Map<String, String> dictionary = new HashMap<>();
+    private Map<String, String> dictionary =
+            new HashMap<>();
 
-    public DictionaryServiceImpl(ObjectMapper objectMapper) {
+    public DictionaryServiceImpl(
+            ObjectMapper objectMapper,
+            ApprovedWordsService approvedWordsService
+    ) {
         this.objectMapper = objectMapper;
+        this.approvedWordsService =
+                approvedWordsService;
     }
 
     @PostConstruct
-    public void loadDictionary() throws Exception {
-        InputStream inputStream =
-                new ClassPathResource("dictionary.json").getInputStream();
+    public void loadDictionary()
+            throws Exception {
 
-        dictionary = objectMapper.readValue(
-                inputStream,
-                new TypeReference<Map<String, String>>() {}
+        InputStream inputStream =
+                new ClassPathResource(
+                        "dictionary.json"
+                ).getInputStream();
+
+        dictionary =
+                objectMapper.readValue(
+                        inputStream,
+                        new TypeReference<>() {}
+                );
+
+        dictionary.putAll(
+                approvedWordsService
+                        .getApprovedWords()
+        );
+
+        System.out.println(
+                "Loaded "
+                        + approvedWordsService
+                        .getApprovedWords()
+                        .size()
+                        + " approved words"
         );
     }
 
     @Override
-    public String lookup(String text) {
-        return dictionary.get(text.toLowerCase());
+    public String lookup(
+            String text
+    ) {
+        return dictionary.get(
+                text.toLowerCase()
+        );
     }
 
     @Override

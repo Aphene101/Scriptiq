@@ -15,31 +15,58 @@ public class ReverseDictionaryServiceImpl
         implements ReverseDictionaryService {
 
     private final ObjectMapper objectMapper;
+    private final ApprovedWordsService approvedWordsService;
 
-    private Map<String, String> dictionary = new HashMap<>();
+    private Map<String, String> dictionary =
+            new HashMap<>();
 
     public ReverseDictionaryServiceImpl(
-            ObjectMapper objectMapper
+            ObjectMapper objectMapper,
+            ApprovedWordsService approvedWordsService
     ) {
         this.objectMapper = objectMapper;
+        this.approvedWordsService =
+                approvedWordsService;
     }
 
     @PostConstruct
-    public void loadDictionary() throws Exception {
+    public void loadDictionary()
+            throws Exception {
 
         InputStream inputStream =
                 new ClassPathResource(
                         "reverse_dictionary.json"
                 ).getInputStream();
 
-        dictionary = objectMapper.readValue(
-                inputStream,
-                new TypeReference<Map<String, String>>() {}
+        dictionary =
+                objectMapper.readValue(
+                        inputStream,
+                        new TypeReference<>() {}
+                );
+
+        approvedWordsService
+                .getApprovedWords()
+                .forEach((franko, arabic) ->
+
+                        dictionary.putIfAbsent(
+                                arabic,
+                                franko
+                        )
+                );
+
+        System.out.println(
+                "Loaded "
+                        + approvedWordsService
+                        .getApprovedWords()
+                        .size()
+                        + " approved reverse words"
         );
     }
 
     @Override
-    public String lookup(String text) {
+    public String lookup(
+            String text
+    ) {
         return dictionary.get(text);
     }
 
@@ -49,7 +76,7 @@ public class ReverseDictionaryServiceImpl
             String franko
     ) {
 
-        dictionary.put(
+        dictionary.putIfAbsent(
                 arabic,
                 franko
         );
