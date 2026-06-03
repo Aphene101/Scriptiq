@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class OnnxTransliterationService {
@@ -17,6 +18,9 @@ public class OnnxTransliterationService {
     private final OrtEnvironment environment;
     private final OrtSession encoderSession;
     private final OrtSession decoderSession;
+
+    private final Map<String, String> cache =
+            new ConcurrentHashMap<>();
 
     public OnnxTransliterationService(
             SourceVocabService sourceVocabService,
@@ -242,6 +246,21 @@ public class OnnxTransliterationService {
             String text
     ) throws Exception {
 
-        return generate(text);
+        String cached =
+                cache.get(text);
+
+        if (cached != null) {
+            return cached;
+        }
+
+        String result =
+                generate(text);
+
+        cache.put(
+                text,
+                result
+        );
+
+        return result;
     }
 }
