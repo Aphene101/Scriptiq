@@ -43,17 +43,9 @@ exports_dir.mkdir(
 torch.onnx.export(
     model,
     (dummy_source, dummy_target),
-    exports_dir / "model.onnx",
+    EXPORT_DIR / "model.onnx",
     export_params=True,
-    opset_version=17,
-    do_constant_folding=True,
-    input_names=[
-        "source",
-        "target"
-    ],
-    output_names=[
-        "output"
-    ]
+    external_data=False
 )
 
 print()

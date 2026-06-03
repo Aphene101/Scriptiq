@@ -1,27 +1,60 @@
 package com.scriptiq.api.service;
 
-import ai.onnxruntime.*;
-
+import ai.onnxruntime.OrtEnvironment;
+import ai.onnxruntime.OrtSession;
 import org.springframework.stereotype.Service;
+
+import java.nio.file.Paths;
 
 @Service
 public class OnnxTransliterationService {
 
-    public OnnxTransliterationService() throws Exception {
-
-        OrtEnvironment env =
-                OrtEnvironment.getEnvironment();
-
-        OrtSession session =
-                env.createSession(
-                        getClass()
-                                .getResource("/models/model.onnx")
-                                .getPath(),
-                        new OrtSession.SessionOptions()
-                );
+    public OnnxTransliterationService(
+            SourceVocabService sourceVocabService,
+            TargetVocabService targetVocabService
+    ) throws Exception {
 
         System.out.println(
-                "ONNX model loaded successfully"
+                sourceVocabService
+                        .getVocab()
+                        .getIndex("a")
         );
+
+        System.out.println(
+                targetVocabService
+                        .getVocab()
+                        .getCharacter(10)
+        );
+
+        long[] encoded =
+                sourceVocabService
+                        .getVocab()
+                        .encode("7abibi");
+
+        for (long value : encoded) {
+
+            System.out.print(
+                    value + " "
+            );
+        }
+
+        System.out.println();
+
+        int[] tokens = {
+                1,
+                17,
+                12,
+                40,
+                12,
+                40,
+                2
+        };
+
+        String decoded =
+                targetVocabService
+                        .getVocab()
+                        .decode(tokens);
+
+        System.out.println(decoded);
     }
 }

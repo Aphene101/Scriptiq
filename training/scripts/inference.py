@@ -14,7 +14,7 @@ service = ModelService(
 
 while True:
 
-    text = input("\nArabizi > ")
+    text = input("\nFranko > ")
 
     words = text.split()
 
