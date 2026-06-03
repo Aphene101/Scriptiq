@@ -22,13 +22,16 @@ public class OnnxTransliterationService {
     private final Map<String, String> cache =
             new ConcurrentHashMap<>();
 
+    private final StatisticsService statisticsService;
+
     public OnnxTransliterationService(
             SourceVocabService sourceVocabService,
-            TargetVocabService targetVocabService
+            TargetVocabService targetVocabService, StatisticsService statisticsService
     ) throws Exception {
 
         this.sourceVocabService = sourceVocabService;
         this.targetVocabService = targetVocabService;
+        this.statisticsService = statisticsService;
 
         this.environment =
                 OrtEnvironment.getEnvironment();
@@ -250,6 +253,9 @@ public class OnnxTransliterationService {
                 cache.get(text);
 
         if (cached != null) {
+
+            statisticsService.cacheHit();
+
             return cached;
         }
 
@@ -261,6 +267,7 @@ public class OnnxTransliterationService {
                 result
         );
 
+        statisticsService.onnxHit();
         return result;
     }
 }

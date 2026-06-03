@@ -12,6 +12,7 @@ public class TransliterationServiceImpl
     private final ReverseDictionaryService reverseDictionaryService;
     private final InputTypeDetector inputTypeDetector;
     private final OnnxTransliterationService onnxTransliterationService;
+    private final StatisticsService statisticsService;
 
     @Override
     public String convert(String text) {
@@ -48,6 +49,11 @@ public class TransliterationServiceImpl
                         dictionaryService.lookup(
                                 word.toLowerCase()
                         );
+
+                if (converted != null) {
+
+                    statisticsService.dictionaryHit();
+                }
 
                 if (converted == null) {
 
