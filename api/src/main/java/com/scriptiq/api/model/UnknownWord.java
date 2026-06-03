@@ -11,5 +11,7 @@ public class UnknownWord {
 
     private String prediction;
 
+    private double confidence;
+
     private boolean approved;
 }

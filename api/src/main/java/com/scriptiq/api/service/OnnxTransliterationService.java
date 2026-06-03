@@ -3,6 +3,7 @@ package com.scriptiq.api.service;
 import ai.onnxruntime.OnnxTensor;
 import ai.onnxruntime.OrtEnvironment;
 import ai.onnxruntime.OrtSession;
+import com.scriptiq.api.model.TransliterationResult;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Paths;
@@ -19,7 +20,10 @@ public class OnnxTransliterationService {
     private final OrtSession encoderSession;
     private final OrtSession decoderSession;
 
-    private final Map<String, String> cache =
+    private final Map<
+            String,
+            TransliterationResult
+            > cache =
             new ConcurrentHashMap<>();
 
     private final StatisticsService statisticsService;
@@ -103,7 +107,24 @@ public class OnnxTransliterationService {
         return bestIndex;
     }
 
-    private String generate(
+    private double confidence(
+            float[] values,
+            int selectedIndex
+    ) {
+
+        double sum = 0;
+
+        for (float value : values) {
+
+            sum += Math.exp(value);
+        }
+
+        return Math.exp(
+                values[selectedIndex]
+        ) / sum;
+    }
+
+    private TransliterationResult generate(
             String text
     ) throws Exception {
 
@@ -155,6 +176,9 @@ public class OnnxTransliterationService {
 
             StringBuilder result =
                     new StringBuilder();
+
+            double confidenceSum = 0;
+            int confidenceCount = 0;
 
             for (
                     int step = 0;
@@ -218,6 +242,12 @@ public class OnnxTransliterationService {
                                     prediction[0]
                             );
 
+                    double tokenConfidence =
+                            confidence(
+                                    prediction[0],
+                                    predictedToken
+                            );
+
                     if (
                             predictedToken
                                     == eos
@@ -236,20 +266,34 @@ public class OnnxTransliterationService {
                             character
                     );
 
+                    confidenceSum +=
+                            tokenConfidence;
+
+                    confidenceCount++;
+
                     currentToken =
                             predictedToken;
                 }
             }
 
-            return result.toString();
+            double averageConfidence =
+                    confidenceCount == 0
+                            ? 0
+                            : confidenceSum
+                              / confidenceCount;
+
+            return new TransliterationResult(
+                    result.toString(),
+                    averageConfidence
+            );
         }
     }
 
-    public String transliterate(
+    public TransliterationResult transliterate(
             String text
     ) throws Exception {
 
-        String cached =
+        TransliterationResult cached =
                 cache.get(text);
 
         if (cached != null) {
@@ -259,7 +303,7 @@ public class OnnxTransliterationService {
             return cached;
         }
 
-        String result =
+        TransliterationResult result =
                 generate(text);
 
         cache.put(
@@ -268,6 +312,7 @@ public class OnnxTransliterationService {
         );
 
         statisticsService.onnxHit();
+
         return result;
     }
 }

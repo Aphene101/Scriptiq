@@ -63,15 +63,19 @@ public class TransliterationServiceImpl
                         long start =
                                 System.nanoTime();
 
-                        converted =
+                        var prediction =
                                 onnxTransliterationService
                                         .transliterate(
                                                 word.toLowerCase()
                                         );
 
+                        converted =
+                                prediction.text();
+
                         unknownWordService.record(
                                 word.toLowerCase(),
-                                converted
+                                prediction.text(),
+                                prediction.confidence()
                         );
 
                         long end =

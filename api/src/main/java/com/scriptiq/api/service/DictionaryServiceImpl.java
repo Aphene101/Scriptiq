@@ -36,4 +36,16 @@ public class DictionaryServiceImpl implements DictionaryService {
     public String lookup(String text) {
         return dictionary.get(text.toLowerCase());
     }
+
+    @Override
+    public void add(
+            String franko,
+            String arabic
+    ) {
+
+        dictionary.put(
+                franko.toLowerCase(),
+                arabic
+        );
+    }
 }

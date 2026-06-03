@@ -16,7 +16,8 @@ public class UnknownWordService {
 
     public void record(
             String word,
-            String prediction
+            String prediction,
+            double confidence
     ) {
 
         words.compute(
@@ -34,6 +35,14 @@ public class UnknownWordService {
 
                         unknownWord.setPrediction(
                                 prediction
+                        );
+
+                        unknownWord.setConfidence(
+                                confidence
+                        );
+
+                        unknownWord.setApproved(
+                                confidence >= 0.95
                         );
 
                         return unknownWord;

@@ -42,4 +42,16 @@ public class ReverseDictionaryServiceImpl
     public String lookup(String text) {
         return dictionary.get(text);
     }
+
+    @Override
+    public void add(
+            String arabic,
+            String franko
+    ) {
+
+        dictionary.put(
+                arabic,
+                franko
+        );
+    }
 }

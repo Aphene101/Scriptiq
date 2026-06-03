@@ -26,6 +26,7 @@ public class UnknownWordController {
                         new UnknownWordResponse(
                                 word.getWord(),
                                 word.getPrediction(),
+                                word.getConfidence(),
                                 word.getCount(),
                                 word.isApproved()
                         )
