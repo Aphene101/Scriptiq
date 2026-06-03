@@ -20,12 +20,14 @@ public class UnknownWordController {
 
         return unknownWordService
                 .getWords()
-                .entrySet()
+                .values()
                 .stream()
-                .map(entry ->
+                .map(word ->
                         new UnknownWordResponse(
-                                entry.getKey(),
-                                entry.getValue().get()
+                                word.getWord(),
+                                word.getPrediction(),
+                                word.getCount(),
+                                word.isApproved()
                         )
                 )
                 .sorted(

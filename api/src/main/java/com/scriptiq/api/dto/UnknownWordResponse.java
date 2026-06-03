@@ -2,6 +2,8 @@ package com.scriptiq.api.dto;
 
 public record UnknownWordResponse(
         String word,
-        int count
+        String prediction,
+        int count,
+        boolean approved
 ) {
 }

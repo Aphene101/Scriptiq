@@ -63,15 +63,16 @@ public class TransliterationServiceImpl
                         long start =
                                 System.nanoTime();
 
-                        unknownWordService.record(
-                                word.toLowerCase()
-                        );
-
                         converted =
                                 onnxTransliterationService
                                         .transliterate(
                                                 word.toLowerCase()
                                         );
+
+                        unknownWordService.record(
+                                word.toLowerCase(),
+                                converted
+                        );
 
                         long end =
                                 System.nanoTime();

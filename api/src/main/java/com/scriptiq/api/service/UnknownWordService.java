@@ -1,27 +1,57 @@
 package com.scriptiq.api.service;
 
+import com.scriptiq.api.model.UnknownWord;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 @Service
 public class UnknownWordService {
 
-    private final Map<String, AtomicInteger> words =
+    private final Map<String, UnknownWord> words =
             new ConcurrentHashMap<>();
 
     public void record(
+            String word,
+            String prediction
+    ) {
+
+        words.compute(
+                word,
+                (key, existing) -> {
+
+                    if (existing == null) {
+
+                        UnknownWord unknownWord =
+                                new UnknownWord(
+                                        word
+                                );
+
+                        unknownWord.setCount(1);
+
+                        unknownWord.setPrediction(
+                                prediction
+                        );
+
+                        return unknownWord;
+                    }
+
+                    existing.setCount(
+                            existing.getCount() + 1
+                    );
+
+                    return existing;
+                }
+        );
+    }
+
+    public void remove(
             String word
     ) {
 
-        words.computeIfAbsent(
-                word,
-                w -> new AtomicInteger()
-        ).incrementAndGet();
+        words.remove(word);
     }
-
 }
