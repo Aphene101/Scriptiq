@@ -1,6 +1,8 @@
 package com.scriptiq.api.controller;
 
+import com.scriptiq.api.dto.ApproveWordRequest;
 import com.scriptiq.api.dto.UnknownWordResponse;
+import com.scriptiq.api.model.UnknownWord;
 import com.scriptiq.api.service.UnknownWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +37,25 @@ public class UnknownWordController {
                         Comparator.comparingInt(
                                 UnknownWordResponse::count
                         ).reversed()
+                )
+                .toList();
+    }
+
+    @GetMapping("/v1/unknown-words/approved")
+    public List<ApproveWordRequest> approvedWords() {
+
+        return unknownWordService
+                .getWords()
+                .values()
+                .stream()
+                .filter(
+                        UnknownWord::isApproved
+                )
+                .map(word ->
+                        new ApproveWordRequest(
+                                word.getWord(),
+                                word.getPrediction()
+                        )
                 )
                 .toList();
     }
