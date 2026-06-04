@@ -79,7 +79,7 @@ print("Dataset size:", len(dataset))
 print("Batches:", len(loader))
 print("Model ready.")
 
-EPOCHS = 10
+EPOCHS = 20
 
 for epoch in range(EPOCHS):
 
