@@ -1,6 +1,6 @@
 package com.scriptiq.api.controller;
 
-import com.scriptiq.api.dto.request.ApproveWordRequest;
+import com.scriptiq.api.dto.request.FrankoArabicApproveWordRequest;
 import com.scriptiq.api.service.arabicfranko.dictionary.ArabicFrankoDictionaryService;
 import com.scriptiq.api.service.arabicfranko.feedback.ArabicFrankoApprovedWordsService;
 import com.scriptiq.api.service.frankoarabic.dictionary.FrankoArabicDictionaryService;
@@ -23,13 +23,13 @@ public class FrankoArabicDictionaryController {
     private final FrankoArabicApprovedWordsService approvedWordsService;
     private final ArabicFrankoApprovedWordsService arabicFrankoApprovedWordsService;
 
-    @PostMapping("/v1/dictionary/bulk-approve")
+    @PostMapping("/v1/franko-arabic-dictionary/bulk-approve")
     public void bulkApprove(
             @RequestBody
-            List<ApproveWordRequest> requests
+            List<FrankoArabicApproveWordRequest> requests
     ) throws Exception {
 
-        for (ApproveWordRequest request : requests) {
+        for (FrankoArabicApproveWordRequest request : requests) {
 
             dictionaryService.add(
                     request.franko(),

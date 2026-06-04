@@ -36,7 +36,7 @@ public class FrankoArabicDictionaryServiceImpl
 
         InputStream inputStream =
                 new ClassPathResource(
-                        "models/franko-arabic/dictionary.json"
+                        "models/franko-arabic/franko_arabic_dictionary.json"
                 ).getInputStream();
 
         dictionary =

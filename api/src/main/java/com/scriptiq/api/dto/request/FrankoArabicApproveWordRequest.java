@@ -1,6 +1,6 @@
 package com.scriptiq.api.dto.request;
 
-public record ApproveWordRequest(
+public record FrankoArabicApproveWordRequest(
         String franko,
         String arabic
 ) {

@@ -1,7 +1,7 @@
 package com.scriptiq.api.controller;
 
-import com.scriptiq.api.dto.request.ApproveWordRequest;
-import com.scriptiq.api.dto.response.UnknownWordResponse;
+import com.scriptiq.api.dto.request.FrankoArabicApproveWordRequest;
+import com.scriptiq.api.dto.response.FrankoArabicUnknownWordResponse;
 import com.scriptiq.api.model.UnknownWord;
 import com.scriptiq.api.service.frankoarabic.feedback.FrankoArabicUnknownWordService;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +17,15 @@ public class FrankoArabicUnknownWordController {
 
     private final FrankoArabicUnknownWordService unknownWordService;
 
-    @GetMapping("/v1/unknown-words")
-    public List<UnknownWordResponse> unknownWords() {
+    @GetMapping("/v1/franko-arabic-unknown-words")
+    public List<FrankoArabicUnknownWordResponse> unknownWords() {
 
         return unknownWordService
                 .getWords()
                 .values()
                 .stream()
                 .map(word ->
-                        new UnknownWordResponse(
+                        new FrankoArabicUnknownWordResponse(
                                 word.getWord(),
                                 word.getPrediction(),
                                 word.getConfidence(),
@@ -35,14 +35,14 @@ public class FrankoArabicUnknownWordController {
                 )
                 .sorted(
                         Comparator.comparingInt(
-                                UnknownWordResponse::count
+                                FrankoArabicUnknownWordResponse::count
                         ).reversed()
                 )
                 .toList();
     }
 
-    @GetMapping("/v1/unknown-words/approved")
-    public List<ApproveWordRequest> approvedWords() {
+    @GetMapping("/v1/franko-arabicunknown-words/approved")
+    public List<FrankoArabicApproveWordRequest> approvedWords() {
 
         return unknownWordService
                 .getWords()
@@ -52,7 +52,7 @@ public class FrankoArabicUnknownWordController {
                         UnknownWord::isApproved
                 )
                 .map(word ->
-                        new ApproveWordRequest(
+                        new FrankoArabicApproveWordRequest(
                                 word.getWord(),
                                 word.getPrediction()
                         )
@@ -60,15 +60,15 @@ public class FrankoArabicUnknownWordController {
                 .toList();
     }
 
-    @GetMapping("/v1/unknown-words/review")
-    public List<ApproveWordRequest> review() {
+    @GetMapping("/v1/franko-arabicunknown-words/review")
+    public List<FrankoArabicApproveWordRequest> review() {
 
         return unknownWordService
                 .getWords()
                 .values()
                 .stream()
                 .map(word ->
-                        new ApproveWordRequest(
+                        new FrankoArabicApproveWordRequest(
                                 word.getWord(),
                                 word.getPrediction()
                         )

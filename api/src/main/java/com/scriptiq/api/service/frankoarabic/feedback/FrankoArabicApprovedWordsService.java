@@ -21,7 +21,7 @@ public class FrankoArabicApprovedWordsService {
                     "api",
                     "data",
                     "franko-arabic",
-                    "approved_words.json"
+                    "franko_arabic_approved_words.json"
             );
 
     private final ObjectMapper objectMapper;

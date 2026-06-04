@@ -22,7 +22,7 @@ public class ArabicFrankoUnknownWordsPersistenceService {
                     "api",
                     "data",
                     "arabic-franko",
-                    "unknown_words.json"
+                    "arabic_franko_unknown_words.json"
             );
 
     private final ObjectMapper objectMapper;

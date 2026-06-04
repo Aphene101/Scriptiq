@@ -15,7 +15,7 @@ public class FrankoArabicTargetVocabService {
     ) throws Exception {
 
         vocab = new Vocab(
-                "models/franko-arabic/target_vocab.json",
+                "models/franko-arabic/franko_arabic_target_vocab.json",
                 objectMapper
         );
     }
