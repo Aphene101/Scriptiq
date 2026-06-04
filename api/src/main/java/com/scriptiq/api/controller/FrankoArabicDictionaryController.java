@@ -1,10 +1,11 @@
 package com.scriptiq.api.controller;
 
 import com.scriptiq.api.dto.request.ApproveWordRequest;
+import com.scriptiq.api.service.arabicfranko.dictionary.ArabicFrankoDictionaryService;
+import com.scriptiq.api.service.arabicfranko.feedback.ArabicFrankoApprovedWordsService;
 import com.scriptiq.api.service.frankoarabic.dictionary.FrankoArabicDictionaryService;
-import com.scriptiq.api.service.frankoarabic.dictionary.FrankoArabicReverseDictionaryService;
-import com.scriptiq.api.service.frankoarabic.feedback.ApprovedWordsService;
-import com.scriptiq.api.service.frankoarabic.feedback.UnknownWordService;
+import com.scriptiq.api.service.frankoarabic.feedback.FrankoArabicApprovedWordsService;
+import com.scriptiq.api.service.frankoarabic.feedback.FrankoArabicUnknownWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +15,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class DictionaryController {
+public class FrankoArabicDictionaryController {
 
     private final FrankoArabicDictionaryService dictionaryService;
-    private final FrankoArabicReverseDictionaryService reverseDictionaryService;
-    private final UnknownWordService unknownWordService;
-    private final ApprovedWordsService approvedWordsService;
+    private final ArabicFrankoDictionaryService arabicFrankoDictionaryService;
+    private final FrankoArabicUnknownWordService unknownWordService;
+    private final FrankoArabicApprovedWordsService approvedWordsService;
+    private final ArabicFrankoApprovedWordsService arabicFrankoApprovedWordsService;
 
     @PostMapping("/v1/dictionary/bulk-approve")
     public void bulkApprove(
@@ -34,7 +36,7 @@ public class DictionaryController {
                     request.arabic()
             );
 
-            reverseDictionaryService.add(
+            arabicFrankoDictionaryService.add(
                     request.arabic(),
                     request.franko()
             );
@@ -42,6 +44,11 @@ public class DictionaryController {
             approvedWordsService.add(
                     request.franko(),
                     request.arabic()
+            );
+
+            arabicFrankoApprovedWordsService.add(
+                    request.arabic(),
+                    request.franko()
             );
 
             unknownWordService.remove(

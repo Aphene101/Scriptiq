@@ -3,7 +3,7 @@ package com.scriptiq.api.controller;
 import com.scriptiq.api.dto.request.ApproveWordRequest;
 import com.scriptiq.api.dto.response.UnknownWordResponse;
 import com.scriptiq.api.model.UnknownWord;
-import com.scriptiq.api.service.frankoarabic.feedback.UnknownWordService;
+import com.scriptiq.api.service.frankoarabic.feedback.FrankoArabicUnknownWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,9 +13,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class UnknownWordController {
+public class FrankoArabicUnknownWordController {
 
-    private final UnknownWordService unknownWordService;
+    private final FrankoArabicUnknownWordService unknownWordService;
 
     @GetMapping("/v1/unknown-words")
     public List<UnknownWordResponse> unknownWords() {

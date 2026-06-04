@@ -1,6 +1,6 @@
 package com.scriptiq.api.service.arabicfranko;
 
-import com.scriptiq.api.service.frankoarabic.dictionary.FrankoArabicReverseDictionaryService;
+import com.scriptiq.api.service.arabicfranko.dictionary.ArabicFrankoDictionaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ArabicFrankoServiceImpl implements ArabicFrankoService {
 
-    private final FrankoArabicReverseDictionaryService reverseDictionaryService;
+    private final ArabicFrankoDictionaryService dictionaryService;
 
     @Override
     public String convert(
@@ -24,7 +24,7 @@ public class ArabicFrankoServiceImpl implements ArabicFrankoService {
 
         for (int i = 0; i < words.length; i++) {
             String word = words[i];
-            String converted = reverseDictionaryService.lookup(word);
+            String converted = dictionaryService.lookup(word);
 
             result.append(converted == null ? word : converted);
 

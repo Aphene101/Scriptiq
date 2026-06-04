@@ -1,4 +1,4 @@
-package com.scriptiq.api.service.frankoarabic.feedback;
+package com.scriptiq.api.service.arabicfranko.feedback;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,12 +15,13 @@ import java.util.Map;
 
 @Getter
 @Service
-public class UnknownWordsPersistenceService {
+public class ArabicFrankoUnknownWordsPersistenceService {
 
     private static final Path FILE_PATH =
             Paths.get(
                     "api",
                     "data",
+                    "arabic-franko",
                     "unknown_words.json"
             );
 
@@ -29,7 +30,7 @@ public class UnknownWordsPersistenceService {
     private Map<String, UnknownWord> words =
             new HashMap<>();
 
-    public UnknownWordsPersistenceService(
+    public ArabicFrankoUnknownWordsPersistenceService(
             ObjectMapper objectMapper
     ) {
         this.objectMapper = objectMapper;
@@ -39,38 +40,14 @@ public class UnknownWordsPersistenceService {
     public void load() throws Exception {
 
         if (!Files.exists(FILE_PATH)) {
-
-            Files.createDirectories(
-                    FILE_PATH.getParent()
-            );
-
-            Files.writeString(
-                    FILE_PATH,
-                    "{}"
-            );
+            Files.createDirectories(FILE_PATH.getParent());
+            Files.writeString(FILE_PATH, "{}");
         }
 
         words =
                 objectMapper.readValue(
                         FILE_PATH.toFile(),
-                        new TypeReference<
-                                Map<String, UnknownWord>
-                                >() {}
+                        new TypeReference<Map<String, UnknownWord>>() {}
                 );
-    }
-
-    public synchronized void save(
-            Map<String, UnknownWord> words
-    ) throws Exception {
-
-        objectMapper
-                .writerWithDefaultPrettyPrinter()
-                .writeValue(
-                        FILE_PATH.toFile(),
-                        words
-                );
-
-        this.words =
-                new HashMap<>(words);
     }
 }

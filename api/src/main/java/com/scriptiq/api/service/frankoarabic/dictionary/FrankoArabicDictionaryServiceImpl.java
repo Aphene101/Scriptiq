@@ -2,7 +2,7 @@ package com.scriptiq.api.service.frankoarabic.dictionary;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scriptiq.api.service.frankoarabic.feedback.ApprovedWordsService;
+import com.scriptiq.api.service.frankoarabic.feedback.FrankoArabicApprovedWordsService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,14 @@ public class FrankoArabicDictionaryServiceImpl
         implements FrankoArabicDictionaryService {
 
     private final ObjectMapper objectMapper;
-    private final ApprovedWordsService approvedWordsService;
+    private final FrankoArabicApprovedWordsService approvedWordsService;
 
     private Map<String, String> dictionary =
             new HashMap<>();
 
     public FrankoArabicDictionaryServiceImpl(
             ObjectMapper objectMapper,
-            ApprovedWordsService approvedWordsService
+            FrankoArabicApprovedWordsService approvedWordsService
     ) {
         this.objectMapper = objectMapper;
         this.approvedWordsService =

@@ -1,4 +1,4 @@
-package com.scriptiq.api.service.frankoarabic.feedback;
+package com.scriptiq.api.service.arabicenglish.feedback;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,12 +14,13 @@ import java.util.Map;
 
 @Getter
 @Service
-public class ApprovedWordsService {
+public class ArabicEnglishApprovedWordsService {
 
     private static final Path FILE_PATH =
             Paths.get(
                     "api",
                     "data",
+                    "arabic-english",
                     "approved_words.json"
             );
 
@@ -28,7 +29,7 @@ public class ApprovedWordsService {
     private Map<String, String> approvedWords =
             new HashMap<>();
 
-    public ApprovedWordsService(
+    public ArabicEnglishApprovedWordsService(
             ObjectMapper objectMapper
     ) {
         this.objectMapper = objectMapper;
@@ -38,15 +39,8 @@ public class ApprovedWordsService {
     public void load() throws Exception {
 
         if (!Files.exists(FILE_PATH)) {
-
-            Files.createDirectories(
-                    FILE_PATH.getParent()
-            );
-
-            Files.writeString(
-                    FILE_PATH,
-                    "{}"
-            );
+            Files.createDirectories(FILE_PATH.getParent());
+            Files.writeString(FILE_PATH, "{}");
         }
 
         approvedWords =
@@ -57,13 +51,13 @@ public class ApprovedWordsService {
     }
 
     public synchronized void add(
-            String franko,
-            String arabic
+            String arabic,
+            String english
     ) throws Exception {
 
         approvedWords.put(
-                franko.toLowerCase(),
-                arabic
+                arabic,
+                english
         );
 
         save();

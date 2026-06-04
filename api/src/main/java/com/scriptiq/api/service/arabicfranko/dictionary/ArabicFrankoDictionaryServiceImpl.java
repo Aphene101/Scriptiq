@@ -1,8 +1,8 @@
-package com.scriptiq.api.service.frankoarabic.dictionary;
+package com.scriptiq.api.service.arabicfranko.dictionary;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scriptiq.api.service.frankoarabic.feedback.ApprovedWordsService;
+import com.scriptiq.api.service.arabicfranko.feedback.ArabicFrankoApprovedWordsService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -12,18 +12,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class FrankoArabicReverseDictionaryServiceImpl
-        implements FrankoArabicReverseDictionaryService {
+public class ArabicFrankoDictionaryServiceImpl
+        implements ArabicFrankoDictionaryService {
 
     private final ObjectMapper objectMapper;
-    private final ApprovedWordsService approvedWordsService;
+    private final ArabicFrankoApprovedWordsService approvedWordsService;
 
     private Map<String, String> dictionary =
             new HashMap<>();
 
-    public FrankoArabicReverseDictionaryServiceImpl(
+    public ArabicFrankoDictionaryServiceImpl(
             ObjectMapper objectMapper,
-            ApprovedWordsService approvedWordsService
+            ArabicFrankoApprovedWordsService approvedWordsService
     ) {
         this.objectMapper = objectMapper;
         this.approvedWordsService =
@@ -47,7 +47,7 @@ public class FrankoArabicReverseDictionaryServiceImpl
 
         approvedWordsService
                 .getApprovedWords()
-                .forEach((franko, arabic) ->
+                .forEach((arabic, franko) ->
 
                         dictionary.putIfAbsent(
                                 arabic,

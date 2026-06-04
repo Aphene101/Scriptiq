@@ -12,9 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 @Service
 @RequiredArgsConstructor
-public class UnknownWordService {
+public class FrankoArabicUnknownWordService {
 
-    private final UnknownWordsPersistenceService
+    private final FrankoArabicUnknownWordsPersistenceService
             persistenceService;
 
     private final Map<String, UnknownWord> words =
