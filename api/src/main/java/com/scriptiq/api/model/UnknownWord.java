@@ -1,11 +1,15 @@
 package com.scriptiq.api.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UnknownWord {
 
-    private final String word;
+    private String word;
 
     private int count;
 

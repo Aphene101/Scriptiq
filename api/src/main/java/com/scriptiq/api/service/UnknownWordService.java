@@ -1,7 +1,9 @@
 package com.scriptiq.api.service;
 
 import com.scriptiq.api.model.UnknownWord;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -9,10 +11,22 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Service
+@RequiredArgsConstructor
 public class UnknownWordService {
+
+    private final UnknownWordsPersistenceService
+            persistenceService;
 
     private final Map<String, UnknownWord> words =
             new ConcurrentHashMap<>();
+
+    @PostConstruct
+    public void load() {
+
+        words.putAll(
+                persistenceService.getWords()
+        );
+    }
 
     public void record(
             String word,
@@ -27,9 +41,11 @@ public class UnknownWordService {
                     if (existing == null) {
 
                         UnknownWord unknownWord =
-                                new UnknownWord(
-                                        word
-                                );
+                                new UnknownWord();
+
+                        unknownWord.setWord(
+                                word
+                        );
 
                         unknownWord.setCount(1);
 
@@ -55,6 +71,8 @@ public class UnknownWordService {
                     return existing;
                 }
         );
+
+        save();
     }
 
     public void remove(
@@ -62,5 +80,21 @@ public class UnknownWordService {
     ) {
 
         words.remove(word);
+
+        save();
+    }
+
+    private void save() {
+
+        try {
+
+            persistenceService.save(
+                    words
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 }

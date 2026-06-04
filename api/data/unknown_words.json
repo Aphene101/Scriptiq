@@ -1,0 +1,9 @@
+{
+  "hello" : {
+    "word" : "hello",
+    "count" : 1,
+    "prediction" : "حلو",
+    "confidence" : 0.92085300270815,
+    "approved" : false
+  }
+}
