@@ -59,4 +59,20 @@ public class UnknownWordController {
                 )
                 .toList();
     }
+
+    @GetMapping("/v1/unknown-words/review")
+    public List<ApproveWordRequest> review() {
+
+        return unknownWordService
+                .getWords()
+                .values()
+                .stream()
+                .map(word ->
+                        new ApproveWordRequest(
+                                word.getWord(),
+                                word.getPrediction()
+                        )
+                )
+                .toList();
+    }
 }
