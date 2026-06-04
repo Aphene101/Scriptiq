@@ -1,7 +1,7 @@
 package com.scriptiq.api.controller;
 
-import com.scriptiq.api.dto.StatsResponse;
-import com.scriptiq.api.service.StatisticsService;
+import com.scriptiq.api.dto.response.StatsResponse;
+import com.scriptiq.api.service.shared.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

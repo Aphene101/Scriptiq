@@ -1,10 +1,10 @@
 package com.scriptiq.api.controller;
 
-import com.scriptiq.api.dto.ApproveWordRequest;
-import com.scriptiq.api.service.ApprovedWordsService;
-import com.scriptiq.api.service.DictionaryService;
-import com.scriptiq.api.service.ReverseDictionaryService;
-import com.scriptiq.api.service.UnknownWordService;
+import com.scriptiq.api.dto.request.ApproveWordRequest;
+import com.scriptiq.api.service.frankoarabic.dictionary.FrankoArabicDictionaryService;
+import com.scriptiq.api.service.frankoarabic.dictionary.FrankoArabicReverseDictionaryService;
+import com.scriptiq.api.service.frankoarabic.feedback.ApprovedWordsService;
+import com.scriptiq.api.service.frankoarabic.feedback.UnknownWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DictionaryController {
 
-    private final DictionaryService dictionaryService;
-    private final ReverseDictionaryService reverseDictionaryService;
+    private final FrankoArabicDictionaryService dictionaryService;
+    private final FrankoArabicReverseDictionaryService reverseDictionaryService;
     private final UnknownWordService unknownWordService;
     private final ApprovedWordsService approvedWordsService;
 

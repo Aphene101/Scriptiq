@@ -9,6 +9,8 @@ class CharDataset(Dataset):
             dataframe,
             source_vocab,
             target_vocab,
+            source_column="Arabize",
+            target_column="Arabic",
             max_source_length=24,
             max_target_length=24
     ):
@@ -17,6 +19,8 @@ class CharDataset(Dataset):
 
         self.source_vocab = source_vocab
         self.target_vocab = target_vocab
+        self.source_column = source_column
+        self.target_column = target_column
 
         self.max_source_length = max_source_length
         self.max_target_length = max_target_length
@@ -41,11 +45,11 @@ class CharDataset(Dataset):
         row = self.df.iloc[idx]
 
         source = self.source_vocab.encode(
-            str(row["Arabize"])
+            str(row[self.source_column])
         )
 
         target = self.target_vocab.encode(
-            str(row["Arabic"])
+            str(row[self.target_column])
         )
 
         source = self.pad(

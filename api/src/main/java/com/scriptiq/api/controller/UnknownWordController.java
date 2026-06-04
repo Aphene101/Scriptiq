@@ -1,9 +1,9 @@
 package com.scriptiq.api.controller;
 
-import com.scriptiq.api.dto.ApproveWordRequest;
-import com.scriptiq.api.dto.UnknownWordResponse;
+import com.scriptiq.api.dto.request.ApproveWordRequest;
+import com.scriptiq.api.dto.response.UnknownWordResponse;
 import com.scriptiq.api.model.UnknownWord;
-import com.scriptiq.api.service.UnknownWordService;
+import com.scriptiq.api.service.frankoarabic.feedback.UnknownWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
