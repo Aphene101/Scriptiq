@@ -22,7 +22,7 @@ high_value = pd.read_csv(high_value_path)
 
 oversampled = pd.concat(
     [generated] +
-    [high_value] * 100,
+    [high_value] * 300,
     ignore_index=True
 )
 

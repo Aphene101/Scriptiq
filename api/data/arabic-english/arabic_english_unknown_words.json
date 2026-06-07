@@ -1,1 +1,9 @@
-{}
+{
+  "بريميم" : {
+    "word" : "بريميم",
+    "count" : 1,
+    "prediction" : "primmy",
+    "confidence" : 0.8935290714761978,
+    "approved" : false
+  }
+}

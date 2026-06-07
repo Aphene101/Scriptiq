@@ -18,10 +18,8 @@ import java.util.List;
 public class FrankoArabicDictionaryController {
 
     private final FrankoArabicDictionaryService dictionaryService;
-    private final ArabicFrankoDictionaryService arabicFrankoDictionaryService;
     private final FrankoArabicUnknownWordService unknownWordService;
     private final FrankoArabicApprovedWordsService approvedWordsService;
-    private final ArabicFrankoApprovedWordsService arabicFrankoApprovedWordsService;
 
     @PostMapping("/v1/franko-arabic-dictionary/bulk-approve")
     public void bulkApprove(
@@ -36,19 +34,9 @@ public class FrankoArabicDictionaryController {
                     request.arabic()
             );
 
-            arabicFrankoDictionaryService.add(
-                    request.arabic(),
-                    request.franko()
-            );
-
             approvedWordsService.add(
                     request.franko(),
                     request.arabic()
-            );
-
-            arabicFrankoApprovedWordsService.add(
-                    request.arabic(),
-                    request.franko()
             );
 
             unknownWordService.remove(

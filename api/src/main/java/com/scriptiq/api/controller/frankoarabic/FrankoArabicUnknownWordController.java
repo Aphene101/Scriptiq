@@ -1,7 +1,7 @@
 package com.scriptiq.api.controller.frankoarabic;
 
 import com.scriptiq.api.dto.request.FrankoArabicApproveWordRequest;
-import com.scriptiq.api.dto.response.FrankoArabicUnknownWordResponse;
+import com.scriptiq.api.dto.response.WordResponse;
 import com.scriptiq.api.model.UnknownWord;
 import com.scriptiq.api.service.frankoarabic.feedback.FrankoArabicUnknownWordService;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,14 @@ public class FrankoArabicUnknownWordController {
     private final FrankoArabicUnknownWordService unknownWordService;
 
     @GetMapping("/v1/franko-arabic-unknown-words")
-    public List<FrankoArabicUnknownWordResponse> unknownWords() {
+    public List<WordResponse> unknownWords() {
 
         return unknownWordService
                 .getWords()
                 .values()
                 .stream()
                 .map(word ->
-                        new FrankoArabicUnknownWordResponse(
+                        new WordResponse(
                                 word.getWord(),
                                 word.getPrediction(),
                                 word.getConfidence(),
@@ -35,7 +35,7 @@ public class FrankoArabicUnknownWordController {
                 )
                 .sorted(
                         Comparator.comparingInt(
-                                FrankoArabicUnknownWordResponse::count
+                                WordResponse::count
                         ).reversed()
                 )
                 .toList();

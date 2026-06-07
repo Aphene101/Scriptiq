@@ -1,4 +1,4 @@
-package com.scriptiq.api.service.frankoarabic;
+package com.scriptiq.api.service.shared;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

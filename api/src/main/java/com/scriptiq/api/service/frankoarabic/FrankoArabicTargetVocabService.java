@@ -1,6 +1,7 @@
 package com.scriptiq.api.service.frankoarabic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scriptiq.api.service.shared.Vocab;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 

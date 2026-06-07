@@ -1,4 +1,4 @@
-package com.scriptiq.api.service.frankoarabic;
+package com.scriptiq.api.service.arabicenglish;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scriptiq.api.service.shared.Vocab;
@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 
 @Getter
 @Service
-public class FrankoArabicSourceVocabService {
+public class ArabicEnglishTargetVocabService {
 
     private final Vocab vocab;
 
-    public FrankoArabicSourceVocabService(
+    public ArabicEnglishTargetVocabService(
             ObjectMapper objectMapper
     ) throws Exception {
 
         vocab = new Vocab(
-                "models/franko-arabic/franko_arabic_source_vocab.json",
+                "models/arabic-english/arabic_english_target_vocab.json",
                 objectMapper
         );
     }

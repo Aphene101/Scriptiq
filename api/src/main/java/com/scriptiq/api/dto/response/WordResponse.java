@@ -1,6 +1,6 @@
 package com.scriptiq.api.dto.response;
 
-public record FrankoArabicUnknownWordResponse(
+public record WordResponse(
         String word,
         String prediction,
         double confidence,
