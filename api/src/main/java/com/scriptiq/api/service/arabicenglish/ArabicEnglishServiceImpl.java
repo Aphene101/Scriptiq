@@ -1,8 +1,8 @@
 package com.scriptiq.api.service.arabicenglish;
 
 import com.scriptiq.api.service.arabicenglish.dictionary.ArabicEnglishDictionaryService;
-import com.scriptiq.api.service.arabicenglish.feedback.ArabicEnglishUnknownWordService;
 import com.scriptiq.api.service.shared.StatisticsService;
+import com.scriptiq.api.service.shared.UnknownWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class ArabicEnglishServiceImpl
     private final ArabicEnglishDictionaryService dictionaryService;
     private final ArabicEnglishOnnxService onnxService;
     private final StatisticsService statisticsService;
-    private final ArabicEnglishUnknownWordService unknownWordService;
+    private final UnknownWordService unknownWordService;
 
     @Override
     public String convert(String text) {

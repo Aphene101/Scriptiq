@@ -1,7 +1,6 @@
-package com.scriptiq.api.service.frankoarabic.feedback;
+package com.scriptiq.api.service.shared;
 
 import com.scriptiq.api.model.UnknownWord;
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,21 +11,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 @Service
 @RequiredArgsConstructor
-public class FrankoArabicUnknownWordService {
-
-    private final FrankoArabicUnknownWordsPersistenceService
-            persistenceService;
-
-    private final Map<String, UnknownWord> words =
-            new ConcurrentHashMap<>();
-
-    @PostConstruct
-    public void load() {
-
-        words.putAll(
-                persistenceService.getWords()
-        );
-    }
+public class UnknownWordService {
+    private final Map<String, UnknownWord>
+            words = new ConcurrentHashMap<>();
 
     public void record(
             String word,
@@ -71,30 +58,11 @@ public class FrankoArabicUnknownWordService {
                     return existing;
                 }
         );
-
-        save();
     }
 
     public void remove(
             String word
     ) {
-
         words.remove(word);
-
-        save();
-    }
-
-    private void save() {
-
-        try {
-
-            persistenceService.save(
-                    words
-            );
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
     }
 }

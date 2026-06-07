@@ -1,11 +1,9 @@
 package com.scriptiq.api.controller.frankoarabic;
 
 import com.scriptiq.api.dto.request.FrankoArabicApproveWordRequest;
-import com.scriptiq.api.service.arabicfranko.dictionary.ArabicFrankoDictionaryService;
-import com.scriptiq.api.service.arabicfranko.feedback.ArabicFrankoApprovedWordsService;
 import com.scriptiq.api.service.frankoarabic.dictionary.FrankoArabicDictionaryService;
 import com.scriptiq.api.service.frankoarabic.feedback.FrankoArabicApprovedWordsService;
-import com.scriptiq.api.service.frankoarabic.feedback.FrankoArabicUnknownWordService;
+import com.scriptiq.api.service.shared.UnknownWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +16,7 @@ import java.util.List;
 public class FrankoArabicDictionaryController {
 
     private final FrankoArabicDictionaryService dictionaryService;
-    private final FrankoArabicUnknownWordService unknownWordService;
+    private final UnknownWordService unknownWordService;
     private final FrankoArabicApprovedWordsService approvedWordsService;
 
     @PostMapping("/v1/franko-arabic-dictionary/bulk-approve")

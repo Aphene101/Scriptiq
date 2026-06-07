@@ -1,8 +1,8 @@
 package com.scriptiq.api.service.frankoarabic;
 
 import com.scriptiq.api.service.frankoarabic.dictionary.FrankoArabicDictionaryService;
-import com.scriptiq.api.service.frankoarabic.feedback.FrankoArabicUnknownWordService;
 import com.scriptiq.api.service.shared.StatisticsService;
+import com.scriptiq.api.service.shared.UnknownWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class FrankoArabicServiceImpl
     private final FrankoArabicDictionaryService dictionaryService;
     private final FrankoArabicOnnxService onnxService;
     private final StatisticsService statisticsService;
-    private final FrankoArabicUnknownWordService unknownWordService;
+    private final UnknownWordService unknownWordService;
 
     @Override
     public String convert(String text) {
