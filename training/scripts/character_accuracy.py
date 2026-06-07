@@ -3,17 +3,29 @@ import sys
 import torch
 import pandas as pd
 
+import argparse
+
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 TRAINING_ROOT = Path(__file__).resolve().parents[1]
 
 sys.path.append(str(TRAINING_ROOT))
 
+
+from configs import load_config
+
 from models.char_vocab import CharVocab
 from models.seq2seq import Encoder, Decoder, Seq2Seq
+from models.transformer_seq2seq import TransformerSeq2Seq
+
+parser = argparse.ArgumentParser()
+parser.add_argument("model")
+args = parser.parse_args()
+
+config = load_config(args.model)
 
 DEVICE = torch.device("cpu")
 
-CHECKPOINT_DIR = TRAINING_ROOT / "checkpoints"
+CHECKPOINT_DIR = config["checkpoint_dir"]
 
 source_vocab = CharVocab()
 source_vocab.load(
@@ -25,23 +37,47 @@ target_vocab.load(
     CHECKPOINT_DIR / "target_vocab.json"
 )
 
-encoder = Encoder(
-    source_vocab.size(),
-    128,
-    256
-)
+if config["architecture"] == "seq2seq":
 
-decoder = Decoder(
-    target_vocab.size(),
-    128,
-    256
-)
+    encoder = Encoder(
+        source_vocab.size(),
+        config["embedding_dim"],
+        config["hidden_dim"]
+    )
 
-model = Seq2Seq(
-    encoder,
-    decoder,
-    target_vocab.size()
-)
+    decoder = Decoder(
+        target_vocab.size(),
+        config["embedding_dim"],
+        config["hidden_dim"]
+    )
+
+    model = Seq2Seq(
+        encoder,
+        decoder,
+        target_vocab.size()
+    )
+
+elif config["architecture"] == "transformer":
+
+    model = TransformerSeq2Seq(
+        source_vocab_size=
+            source_vocab.size(),
+        target_vocab_size=
+            target_vocab.size(),
+        embedding_dim=
+            config["embedding_dim"],
+        max_length=max(
+            config["max_source_length"],
+            config["max_target_length"]
+        )
+    )
+
+else:
+
+    raise ValueError(
+        f"Unknown architecture: "
+        f"{config['architecture']}"
+    )
 
 model.load_state_dict(
     torch.load(
@@ -53,9 +89,7 @@ model.load_state_dict(
 model.eval()
 
 test_df = pd.read_csv(
-    PROJECT_ROOT /
-    "datasets" /
-    "processed" /
+    config["dataset_dir"] /
     "test.csv"
 )
 
@@ -64,16 +98,23 @@ total_chars = 0
 
 for _, row in test_df.iterrows():
 
-    source_word = str(row["Arabize"]).lower()
-    expected = str(row["Arabic"])
+    source_word = str(
+        row[config["source_column"]]
+    ).lower()
+
+    expected = str(
+        row[config["target_column"]]
+    )
 
     encoded = source_vocab.encode(
         source_word
     )
 
-    encoded = encoded[:24]
+    encoded = encoded[
+        :config["max_source_length"]
+    ]
 
-    while len(encoded) < 24:
+    while len(encoded) < config["max_source_length"]:
         encoded.append(0)
 
     source_tensor = torch.tensor(

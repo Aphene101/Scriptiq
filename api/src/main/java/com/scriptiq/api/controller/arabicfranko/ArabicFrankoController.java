@@ -1,8 +1,8 @@
-package com.scriptiq.api.controller;
+package com.scriptiq.api.controller.arabicfranko;
 
 import com.scriptiq.api.dto.request.TransliterationRequest;
 import com.scriptiq.api.dto.response.TransliterationResponse;
-import com.scriptiq.api.service.frankoarabic.FrankoArabicService;
+import com.scriptiq.api.service.arabicfranko.ArabicFrankoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/franko-arabic")
+@RequestMapping("/v1/arabic-franko")
 @RequiredArgsConstructor
-public class FrankoArabicController {
+public class ArabicFrankoController {
 
-    private final FrankoArabicService frankoArabicService;
+    private final ArabicFrankoService arabicFrankoService;
 
     @PostMapping
     public TransliterationResponse convert(
             @Valid @RequestBody TransliterationRequest request
     ) {
         return new TransliterationResponse(
-                frankoArabicService.convert(request.text())
+                arabicFrankoService.convert(request.text())
         );
     }
 }

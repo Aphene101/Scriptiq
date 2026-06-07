@@ -1,6 +1,9 @@
-package com.scriptiq.api.controller;
+package com.scriptiq.api.controller.arabicenglish;
 
 import com.scriptiq.api.dto.request.FrankoArabicApproveWordRequest;
+import com.scriptiq.api.service.arabicenglish.dictionary.ArabicEnglishDictionaryService;
+import com.scriptiq.api.service.arabicenglish.feedback.ArabicEnglishApprovedWordsService;
+import com.scriptiq.api.service.arabicenglish.feedback.ArabicEnglishUnknownWordService;
 import com.scriptiq.api.service.arabicfranko.dictionary.ArabicFrankoDictionaryService;
 import com.scriptiq.api.service.arabicfranko.feedback.ArabicFrankoApprovedWordsService;
 import com.scriptiq.api.service.frankoarabic.dictionary.FrankoArabicDictionaryService;
@@ -15,13 +18,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class FrankoArabicDictionaryController {
+public class ArabicEnglishDictionaryController {
 
-    private final FrankoArabicDictionaryService dictionaryService;
-    private final ArabicFrankoDictionaryService arabicFrankoDictionaryService;
-    private final FrankoArabicUnknownWordService unknownWordService;
-    private final FrankoArabicApprovedWordsService approvedWordsService;
-    private final ArabicFrankoApprovedWordsService arabicFrankoApprovedWordsService;
+    private final ArabicEnglishDictionaryService dictionaryService;
+    private final ArabicEnglishDictionaryService arabicEnglishDictionaryService;
+    private final ArabicEnglishUnknownWordService unknownWordService;
+    private final ArabicEnglishApprovedWordsService approvedWordsService;
+    private final ArabicEnglishApprovedWordsService arabicEnglishApprovedWordsService;
 
     @PostMapping("/v1/franko-arabic-dictionary/bulk-approve")
     public void bulkApprove(
@@ -36,7 +39,7 @@ public class FrankoArabicDictionaryController {
                     request.arabic()
             );
 
-            arabicFrankoDictionaryService.add(
+            arabicEnglishDictionaryService.add(
                     request.arabic(),
                     request.franko()
             );
@@ -46,7 +49,7 @@ public class FrankoArabicDictionaryController {
                     request.arabic()
             );
 
-            arabicFrankoApprovedWordsService.add(
+            arabicEnglishApprovedWordsService.add(
                     request.arabic(),
                     request.franko()
             );

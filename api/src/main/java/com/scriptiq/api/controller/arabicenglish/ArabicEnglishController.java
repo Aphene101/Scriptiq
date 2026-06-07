@@ -1,4 +1,4 @@
-package com.scriptiq.api.controller;
+package com.scriptiq.api.controller.arabicenglish;
 
 import com.scriptiq.api.dto.request.TransliterationRequest;
 import com.scriptiq.api.dto.response.TransliterationResponse;

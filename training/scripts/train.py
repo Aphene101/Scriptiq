@@ -15,6 +15,9 @@ from configs import load_config
 from models.char_dataset import CharDataset
 from models.char_vocab import CharVocab
 from models.seq2seq import Decoder, Encoder, Seq2Seq
+from models.transformer_seq2seq import (
+    TransformerSeq2Seq
+)
 
 
 def train(config):
@@ -48,23 +51,50 @@ def train(config):
         shuffle=True,
     )
 
-    encoder = Encoder(
-        source_vocab.size(),
-        config["embedding_dim"],
-        config["hidden_dim"],
-    )
+    if config["architecture"] == "seq2seq":
 
-    decoder = Decoder(
-        target_vocab.size(),
-        config["embedding_dim"],
-        config["hidden_dim"],
-    )
+        encoder = Encoder(
+            source_vocab.size(),
+            config["embedding_dim"],
+            config["hidden_dim"],
+        )
 
-    model = Seq2Seq(
-        encoder,
-        decoder,
-        target_vocab.size(),
-    ).to(device)
+        decoder = Decoder(
+            target_vocab.size(),
+            config["embedding_dim"],
+            config["hidden_dim"],
+        )
+
+        model = Seq2Seq(
+            encoder,
+            decoder,
+            target_vocab.size(),
+        ).to(device)
+
+    elif config["architecture"] == "transformer":
+
+        model = TransformerSeq2Seq(
+            source_vocab_size=
+                source_vocab.size(),
+            target_vocab_size=
+                target_vocab.size(),
+            embedding_dim=
+                config["embedding_dim"],
+            max_length=max(
+                config[
+                    "max_source_length"
+                ],
+                config[
+                    "max_target_length"
+                ]
+            )
+        ).to(device)
+
+    else:
+
+        raise ValueError(
+            f"Unknown architecture: {config['architecture']}"
+        )
 
     criterion = nn.CrossEntropyLoss(
         ignore_index=0
@@ -84,24 +114,46 @@ def train(config):
         model.train()
         total_loss = 0
 
-        for source_batch, target_batch in loader:
+        for batch_index, (source_batch, target_batch) in enumerate(loader):
+
             source_batch = source_batch.to(device)
             target_batch = target_batch.to(device)
 
             optimizer.zero_grad()
 
-            output = model(
-                source_batch,
-                target_batch,
-            )
+            if config["architecture"] == "transformer":
 
-            loss = criterion(
-                output[:, 1:].reshape(
-                    -1,
-                    target_vocab.size(),
-                ),
-                target_batch[:, 1:].reshape(-1),
-            )
+                decoder_input = target_batch[:, :-1]
+
+                expected_output = target_batch[:, 1:]
+
+                output = model(
+                    source_batch,
+                    decoder_input,
+                )
+
+                loss = criterion(
+                    output.reshape(
+                        -1,
+                        target_vocab.size(),
+                    ),
+                    expected_output.reshape(-1),
+                )
+
+            else:
+
+                output = model(
+                    source_batch,
+                    target_batch,
+                )
+
+                loss = criterion(
+                    output[:, 1:].reshape(
+                        -1,
+                        target_vocab.size(),
+                    ),
+                    target_batch[:, 1:].reshape(-1),
+                )
 
             loss.backward()
             optimizer.step()

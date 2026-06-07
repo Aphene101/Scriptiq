@@ -40,14 +40,38 @@ public class ArabicEnglishUnknownWordsPersistenceService {
     public void load() throws Exception {
 
         if (!Files.exists(FILE_PATH)) {
-            Files.createDirectories(FILE_PATH.getParent());
-            Files.writeString(FILE_PATH, "{}");
+
+            Files.createDirectories(
+                    FILE_PATH.getParent()
+            );
+
+            Files.writeString(
+                    FILE_PATH,
+                    "{}"
+            );
         }
 
         words =
                 objectMapper.readValue(
                         FILE_PATH.toFile(),
-                        new TypeReference<Map<String, UnknownWord>>() {}
+                        new TypeReference<
+                                Map<String, UnknownWord>
+                                >() {}
                 );
+    }
+
+    public synchronized void save(
+            Map<String, UnknownWord> words
+    ) throws Exception {
+
+        objectMapper
+                .writerWithDefaultPrettyPrinter()
+                .writeValue(
+                        FILE_PATH.toFile(),
+                        words
+                );
+
+        this.words =
+                new HashMap<>(words);
     }
 }

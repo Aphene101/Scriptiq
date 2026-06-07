@@ -1,4 +1,4 @@
-package com.scriptiq.api.controller;
+package com.scriptiq.api.controller.frankoarabic;
 
 import com.scriptiq.api.dto.request.FrankoArabicApproveWordRequest;
 import com.scriptiq.api.dto.response.FrankoArabicUnknownWordResponse;
@@ -41,7 +41,7 @@ public class FrankoArabicUnknownWordController {
                 .toList();
     }
 
-    @GetMapping("/v1/franko-arabicunknown-words/approved")
+    @GetMapping("/v1/franko-arabic-unknown-words/approved")
     public List<FrankoArabicApproveWordRequest> approvedWords() {
 
         return unknownWordService
@@ -60,7 +60,7 @@ public class FrankoArabicUnknownWordController {
                 .toList();
     }
 
-    @GetMapping("/v1/franko-arabicunknown-words/review")
+    @GetMapping("/v1/franko-arabic-unknown-words/review")
     public List<FrankoArabicApproveWordRequest> review() {
 
         return unknownWordService
