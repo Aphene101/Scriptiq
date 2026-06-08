@@ -8,7 +8,7 @@ CONFIG = {
     "source_language": "arabic",
     "target_language": "franko",
     "source_column": "Arabic",
-    "target_column": "Arabize",
+    "target_column": "Franko",
     "architecture": "seq2seq",
     "dataset_dir": TRAINING_ROOT / "datasets" / "arabic-franko",
     "checkpoint_dir": TRAINING_ROOT / "checkpoints" / "arabic-franko",

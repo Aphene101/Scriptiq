@@ -1,4 +1,5 @@
 from pathlib import Path
+import argparse
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -6,16 +7,38 @@ from sklearn.model_selection import train_test_split
 
 ROOT = Path(__file__).resolve().parents[1]
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument("model")
+args = parser.parse_args()
+
 dataset_dir = (
     ROOT /
     "datasets" /
-    "arabic-english"
+    args.model
 )
 
-df = pd.read_csv(
+combined_path = (
     dataset_dir /
     "combined.csv"
 )
+
+generated_path = (
+    dataset_dir /
+    "generated.csv"
+)
+
+if combined_path.exists():
+
+    df = pd.read_csv(
+        combined_path
+    )
+
+else:
+
+    df = pd.read_csv(
+        generated_path
+    )
 
 train_df, temp_df = train_test_split(
     df,
